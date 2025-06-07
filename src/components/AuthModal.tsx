@@ -37,7 +37,9 @@ const AuthModal = () => {
     } catch (error: any) {
       console.error("Erro de autenticação:", error);
       
-      if (error.message?.includes("Invalid login credentials")) {
+      if (error.message?.includes("Email not confirmed")) {
+        toast.error("Por favor, verifique seu email e clique no link de confirmação para ativar sua conta");
+      } else if (error.message?.includes("Invalid login credentials")) {
         toast.error("Email ou senha incorretos");
       } else if (error.message?.includes("User already registered")) {
         toast.error("Este email já está cadastrado");
