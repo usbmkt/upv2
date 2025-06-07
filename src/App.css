@@ -1,0 +1,70 @@
+/* Additional custom styles not covered by Tailwind */
+.timeline-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+.dark .timeline-container::-webkit-scrollbar-track {
+  background: #333;
+}
+
+.dark .timeline-container::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.phase-bar {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.phase-bar:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* Calendar day highlight */
+.rdp-day_selected {
+  background-color: #FF6B35 !important;
+}
+
+/* Fade animations */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Project card hover effect */
+.project-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.dark .project-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
