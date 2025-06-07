@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, Rocket, Calculator, Calendar, BarChart3 } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Rocket, Calculator, Calendar, BarChart3, AlertCircle } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "sonner";
 
@@ -8,6 +8,7 @@ const AuthModal = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showEmailConfirmationMessage, setShowEmailConfirmationMessage] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,6 +18,7 @@ const AuthModal = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setShowEmailConfirmationMessage(false);
 
     try {
       if (isLogin) {
@@ -32,13 +34,15 @@ const AuthModal = () => {
           return;
         }
         await signUp(formData.email, formData.password);
-        toast.success("Conta criada com sucesso!");
+        toast.success("Conta criada com sucesso! Verifique seu email para confirmar a conta.");
+        setShowEmailConfirmationMessage(true);
       }
     } catch (error: any) {
       console.error("Erro de autenticação:", error);
       
-      if (error.message?.includes("Email not confirmed")) {
-        toast.error("Por favor, verifique seu email e clique no link de confirmação para ativar sua conta");
+      if (error.message?.includes("Email not confirmed") || error.message?.includes("email_not_confirmed")) {
+        setShowEmailConfirmationMessage(true);
+        toast.error("Email não confirmado. Verifique sua caixa de entrada e clique no link de confirmação.");
       } else if (error.message?.includes("Invalid login credentials")) {
         toast.error("Email ou senha incorretos");
       } else if (error.message?.includes("User already registered")) {
@@ -75,6 +79,28 @@ const AuthModal = () => {
             {isLogin ? "Entre na sua conta" : "Crie sua conta"}
           </p>
         </div>
+
+        {/* Email Confirmation Message */}
+        {showEmailConfirmationMessage && (
+          <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="text-sm">
+                <h3 className="font-medium text-amber-800 mb-1">
+                  Confirmação de Email Necessária
+                </h3>
+                <p className="text-amber-700 mb-2">
+                  Enviamos um email de confirmação para <strong>{formData.email}</strong>
+                </p>
+                <p className="text-amber-700 text-xs">
+                  • Verifique sua caixa de entrada e pasta de spam<br/>
+                  • Clique no link de confirmação no email<br/>
+                  • Retorne aqui para fazer login após a confirmação
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Auth Form */}
         <div className="bg-card border rounded-2xl shadow-xl p-8">
@@ -162,7 +188,10 @@ const AuthModal = () => {
               {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}
               <button
                 type="button"
-                onClick={() => setIsLogin(!isLogin)}
+                onClick={() => {
+                  setIsLogin(!isLogin);
+                  setShowEmailConfirmationMessage(false);
+                }}
                 className="ml-2 text-primary hover:text-primary/80 font-medium transition-colors"
               >
                 {isLogin ? "Criar conta" : "Fazer login"}
