@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, Rocket } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Rocket, Calculator, Calendar, BarChart3 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "sonner";
 
